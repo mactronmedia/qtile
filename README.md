@@ -1,4 +1,4 @@
-#picom.conf Fix screan tearing on Asus
+picom.conf #Fix screan tearing on Asus
 
 ```
 backend = "glx";
