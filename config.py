@@ -167,7 +167,7 @@ for i in groups:
     ])
 
 def init_layout_theme():
-    return {"margin":5,
+    return {"margin":4,
             "border_width":2,
             "border_focus": "#5e81ac",
             "border_normal": "#4c566a"
@@ -177,8 +177,8 @@ layout_theme = init_layout_theme()
 
 
 layouts = [
-    layout.MonadTall(margin=5, border_width=2, border_focus="#b54dbd", border_normal="#4c566a"),
-    layout.MonadWide(margin=5, border_width=2, border_focus="#b54dbd", border_normal="#4c566a"),
+    layout.MonadTall(margin = 5, border_width = 2, border_focus="#b54dbd", border_normal="#4c566a"),
+    layout.MonadWide(margin = 5, border_width = 2, border_focus="#b54dbd", border_normal="#4c566a"),
     layout.Matrix(**layout_theme),
     layout.Bsp(**layout_theme),
     layout.Floating(**layout_theme),
@@ -217,7 +217,8 @@ colors = [["#282c34", "#282c34"], # panel background
           ["#4f76c7", "#4f76c7"], # color for the 'even widgets'
           ["#e1acff", "#e1acff"], # window name
           ["#ffffff", "#ffffff"],
-          ["#32cd32", "#32cd32"]] # background for active groups #32cd32
+          ["#32cd32", "#32cd32"], # background for active groups #32cd32
+          ["#03c03c", "#03c03c"]] # center window name & cmus
 
 
 def init_widgets_list():
@@ -226,12 +227,11 @@ def init_widgets_list():
 
               widget.TextBox(
                        text = '',
-                       fontsize = 25,
+                       fontsize = 23,
                        font = "Iosevka Nerd Font",
                        mouse_callbacks = {'Button1': lambda: qtile.cmd_spawn('rofi -show drun -config ~/.config/rofi/config.rasi -display-drun \"Run: \" -drun-display-format \"{name}\"')},
                        background = colors[5],
-                       width = 30
-
+                       width = 27
                        ),
 
               widget.TextBox(
@@ -241,16 +241,16 @@ def init_widgets_list():
                        padding = 0,
                        fontsize = 59
                        ),
+
               widget.GroupBox(
                        fontsize = 15,
-                       margin_y = 3,
+                       margin_y = 4,
                        margin_x = 0,
                        padding_y = 5,
                        padding_x = 5,
                        borderwidth = 3,
                        active = colors[8],
                        inactive = colors[7],
-                       rounded = False,
                        highlight_color = colors[4],
                        highlight_method = "line",
                        this_current_screen_border = colors[6],
@@ -268,7 +268,7 @@ def init_widgets_list():
                        fontsize = 59
                        ),
               widget.CurrentLayout(
-                        font = "Noto Sans Bold",
+                        font = "Noto Sans",
                         foreground = colors[2],
                         background = colors[0],
                         ),
@@ -280,25 +280,29 @@ def init_widgets_list():
                        background = colors[1]
                        ),
               widget.Sep(
-                       linewidth = 0,
-                       padding = 40,
-                       foreground = colors[2],
+                       linewidth = 1,
+                       padding = 10,
                        background = colors[0]
                        ),
               widget.WindowName(
-                       foreground = colors[6],
+                       foreground = colors[9],
                        background = colors[0],
                        padding = 0
                        ),
-               widget.Sep(
-                       linewidth = 0,
-                       padding = 6,
-                       foreground = colors[0],
-                       background = colors[0]
-                       ),
+            ############ CENTER ############
 
-              ############ RIGHT ############
+         widget.Sep (
+            background = colors[0]
+            ),
 
+
+              widget.Cmus (
+
+                background = colors[0],
+                play_color = colors[9],
+
+              ),
+            ############ RIGHT ############
 
               widget.TextBox( #CPU
                        text = '',
@@ -311,8 +315,8 @@ def init_widgets_list():
                        text = '',
                        background = colors[4],
                        foreground = colors[2],
-                       padding = 4,
-                       fontsize = 30
+                       padding = 2,
+                       fontsize = 28
                        ),
                 widget.CPU(
                         foreground = colors[2],
@@ -320,7 +324,8 @@ def init_widgets_list():
                         foreground_alert = 'ff0000',
                         update_interval= 5.0,
                         mouse_callbacks = {'Button1': lambda: qtile.cmd_spawn(myTerm + ' -e bpytop')},
-                        format='{load_percent}%'
+                        fontsize = 12,
+                        format = '{load_percent}%'
                         ),
 
                # widget.OpenWeather(
@@ -346,7 +351,7 @@ def init_widgets_list():
                        foreground = colors[2],
                        background = colors[5],
                        padding = 0,
-                       fontsize = 15
+                       fontsize = 14
                        ),
                 widget.Memory(
                         foreground = colors[2],
@@ -354,6 +359,7 @@ def init_widgets_list():
                         foreground_alert = 'ff0000',
                         update_interval=5.0,
                         mouse_callbacks = {'Button1': lambda: qtile.cmd_spawn(myTerm + ' -e bpytop')},
+                        fontsize = 12,
                         format='{MemUsed: .0f}{mm}{MemTotal: .0f}{mm} '
                         ),
 
@@ -370,13 +376,14 @@ def init_widgets_list():
                            background = colors[4],
                            foreground = colors[2],
                            padding = 4,
-                           fontsize = 16
+                           fontsize = 14
                            ),
                   widget.ThermalSensor(
                             fmt = '{} ',
                             update_interval = 10,
                             tag_sensor = 'Core 1',
                             background = colors[4],
+                            fontsize = 12,
                             padding = 0
                             ),
 
@@ -396,7 +403,7 @@ def init_widgets_list():
                        ),
               widget.Volume(
                        background = colors[5],
-                       padding = 5
+                       padding = 3
                        ),
 
 
@@ -424,11 +431,12 @@ def init_widgets_list():
                        ),
                 widget.CheckUpdates(
                        update_interval = 60,
-                       distro = 'Arch',
+                       distro = 'Arch_checkupdates',
                        fmt = '{}',
                        display_format = "{updates} Updates",
                        foreground = colors[2],
                        background = colors[4],
+                       ontsize = 12,
                        mouse_callbacks = {'Button1': lambda: qtile.cmd_spawn(myTerm + ' -e sudo pacman -Syu')}
                        ),
 
@@ -444,7 +452,7 @@ def init_widgets_list():
                        foreground = colors[2],
                        background = colors[5],
                        padding = 3,
-                       fontsize = 12
+                       fontsize = 14
                        ),
                widget.Net(
                        format = '{down} {up} ',
@@ -452,6 +460,7 @@ def init_widgets_list():
                        background = colors[5],
                        padding = 0,
                        update_interval= 5.0,
+                       fontsize = 12
                        ),
 
               widget.TextBox( #Windows
@@ -470,7 +479,7 @@ def init_widgets_list():
               widget.CurrentLayout(
                        foreground = colors[2],
                        background = colors[4],
-                       padding = 5
+                       padding = 4
                        ),
 
                 widget.TextBox( #BTC
@@ -497,7 +506,8 @@ def init_widgets_list():
 
                        mouse_callbacks = {'Button1': lambda: qtile.cmd_spawn(myBrowser + ' cointop.sh')},
                        #mouse_callbacks = {'Button1': lambda: qtile.cmd_spawn(myTerm + ' -e cointop')},
-                       format = '{amount:.0f}'
+                       format = '{amount:.0f}',
+                       fontsize = 12
                        ),
 
               widget.TextBox( #Date
@@ -512,7 +522,7 @@ def init_widgets_list():
                        background = colors[4],
                        foreground = colors[2],
                        padding = 0,
-                       fontsize = 14
+                       fontsize = 12
                        ),
               widget.Clock(
                        background = colors[4],
@@ -527,11 +537,24 @@ def init_widgets_list():
                        padding = 0,
                        fontsize = 59
                        ),
-               widget.Systray(
-                        background=colors[5],
-                        padding = 0
-                      ),
-              ]
+
+                widget.WidgetBox( 
+                    background = colors[5],
+                    text_closed = "",
+                    text_open = "",
+                    fontsize = 15,                  
+                        widgets=[
+                            widget.Systray(background = colors[5])]                     
+                    ),  
+
+                widget.Sep(
+                    background = colors[5],
+                    linewidth = 0,
+                    padding = 8
+
+                    ),           
+                
+            ]
     return widgets_list
 
 widgets_list = init_widgets_list()
