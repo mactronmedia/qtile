@@ -1,4 +1,10 @@
-# -*- coding: utf-8 -*-
+#
+#   ___ _____ ___ _     _____
+#  / _ \_   _|_ _| |   | ____|
+# | | | || |  | || |   |  _|
+# | |_| || |  | || |___| |___
+#  \__\_\|_| |___|_____|_____|
+#
 
 import os
 import re
@@ -7,10 +13,13 @@ import subprocess
 from libqtile import qtile
 from libqtile.config import Click, Drag, Group, KeyChord, Key, Match, Screen
 from libqtile.command import lazy
-from libqtile import layout, bar, widget, hook
+from libqtile import qtile, layout, bar, widget, hook
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
+#from libqtile.config import EzKey
 from typing import List  # noqa: F401from typing import List  # noqa: F401
+#from plasma import Plasma
+
 #import arcobattery
 
 #mod4 or mod = super key
@@ -34,6 +43,7 @@ def window_to_next_group(qtile):
     if qtile.currentWindow is not None:
         i = qtile.groups.index(qtile.currentGroup)
         qtile.currentWindow.togroup(qtile.groups[i + 1].name)
+
 
 keys = [
 
@@ -111,7 +121,6 @@ keys = [
         lazy.layout.shrink(),
         lazy.layout.increase_nmaster(),
         ),
-
 # FLIP LAYOUT FOR MONADTALL/MONADWIDE
     Key([mod, "shift"], "f", lazy.layout.flip()),
 
@@ -136,7 +145,7 @@ keys = [
 # TOGGLE FLOATING LAYOUT
     Key([mod, "shift"], "space", lazy.window.toggle_floating()),
 
-    ]
+]
 
 groups = []
 
@@ -177,7 +186,7 @@ layout_theme = init_layout_theme()
 
 
 layouts = [
-    layout.MonadTall(margin = 5, border_width = 2, border_focus="#b54dbd", border_normal="#4c566a"),
+    layout.MonadTall(margin = 10, border_width = 2, border_focus="#b54dbd", border_normal="#4c566a"),
     layout.MonadWide(margin = 5, border_width = 2, border_focus="#b54dbd", border_normal="#4c566a"),
     layout.Matrix(**layout_theme),
     layout.Bsp(**layout_theme),
@@ -187,9 +196,9 @@ layouts = [
     layout.Stack(**layout_theme),
     layout.TreeTab(
     font = "Ubuntu",
-         fontsize = 10,
+         fontsize = 12,
          sections = [" FIRST", " SECOND", " THIRD", " FOURTH"],
-         section_fontsize = 10,
+         section_fontsize = 12,
          border_width = 2,
          bg_color = "1c1f24",
          active_bg = "4f76c7",
@@ -205,6 +214,15 @@ layouts = [
          vspace = 3,
          panel_width = 200
          )
+#        Plasma(
+#        border_normal='#333333',
+#        border_focus='#00e891',
+#        border_normal_fixed='#006863',
+#        border_focus_fixed='#00e8dc',
+#        border_width=1,
+#        border_width_single=0,
+#        margin=7
+#    )
 ]
 
 # COLORS FOR THE BAR
@@ -217,9 +235,9 @@ colors = [["#282c34", "#282c34"], # panel background
           ["#4f76c7", "#4f76c7"], # color for the 'even widgets'
           ["#e1acff", "#e1acff"], # window name
           ["#ffffff", "#ffffff"],
-          ["#32cd32", "#32cd32"], # background for active groups #32cd32
-          ["#03c03c", "#03c03c"]] # center window name & cmus
-
+          ["#1aff1a", "#1aff1a"], # background for active groups #32cd32
+          ["#03c03c", "#03c03c"], # center window name & cmus
+          ["#ff7f7f", "#ff7f7f"]] # notification
 
 def init_widgets_list():
     prompt = "{0}@{1}: ".format(os.environ["USER"], socket.gethostname())
@@ -257,6 +275,7 @@ def init_widgets_list():
                        this_screen_border = colors [4],
                        other_current_screen_border = colors[6],
                        other_screen_border = colors[4],
+                       urgent_border = colors[10],
                        foreground = colors[2],
                        background = colors[4]
                        ),
@@ -289,12 +308,8 @@ def init_widgets_list():
                        background = colors[0],
                        padding = 0
                        ),
+
             ############ CENTER ############
-
-         widget.Sep (
-            background = colors[0]
-            ),
-
 
               widget.Cmus (
 
@@ -316,28 +331,18 @@ def init_widgets_list():
                        background = colors[4],
                        foreground = colors[2],
                        padding = 2,
-                       fontsize = 28
+                       fontsize = 20
                        ),
                 widget.CPU(
                         foreground = colors[2],
                         background = colors[4],
-                        foreground_alert = 'ff0000',
+                        foreground_alert = 'ffffff',
                         update_interval= 5.0,
                         mouse_callbacks = {'Button1': lambda: qtile.cmd_spawn(myTerm + ' -e bpytop')},
+                        #font = "Noto Sans",
                         fontsize = 12,
                         format = '{load_percent}%'
                         ),
-
-               # widget.OpenWeather(
-              #	       cityid = 788652,
-             # 	       #format = '{location_city}: {main_temp} °{units_temperature} {weather_details} ',
-             # 	       #format = '{main_temp} °{units_temperature} {weather_details} ',
-             # 	       format = '{main_temp} °{units_temperature}',
-             #          metric = True,
-             # 	       background = colors[4],
-             # 	       fontsize = 14,
-             # 	       #mouse_callbacks = 'https://openweathermap.org/city/788652'
-             # 	       ),
 
                 widget.TextBox( #RAM
                        text = '',
@@ -383,6 +388,8 @@ def init_widgets_list():
                             update_interval = 10,
                             tag_sensor = 'Core 1',
                             background = colors[4],
+                            foreground_alert = 'ffbb00',
+                            threshold = 70,
                             fontsize = 12,
                             padding = 0
                             ),
@@ -403,6 +410,7 @@ def init_widgets_list():
                        ),
               widget.Volume(
                        background = colors[5],
+                       fontsize = 12,
                        padding = 3
                        ),
 
@@ -414,13 +422,6 @@ def init_widgets_list():
                        padding = 0,
                        fontsize = 59
                        ),
-              # widget.TextBox(
-                      # text = '⟳ ',
-                      # background = colors[4],
-                      # foreground = colors[2],
-                      # padding = 0,
-                      # fontsize = 19
-                      # ),
                 widget.Wallpaper (
                        directory = '~/Pictures/wallpapers',
                        label = "⟳",
@@ -436,7 +437,7 @@ def init_widgets_list():
                        display_format = "{updates} Updates",
                        foreground = colors[2],
                        background = colors[4],
-                       ontsize = 12,
+                       fontsize = 12,
                        mouse_callbacks = {'Button1': lambda: qtile.cmd_spawn(myTerm + ' -e sudo pacman -Syu')}
                        ),
 
@@ -452,7 +453,7 @@ def init_widgets_list():
                        foreground = colors[2],
                        background = colors[5],
                        padding = 3,
-                       fontsize = 14
+                       fontsize = 10
                        ),
                widget.Net(
                        format = '{down} {up} ',
@@ -500,12 +501,7 @@ def init_widgets_list():
                        crypto = 'BTC',
                        foreground = colors[2],
                        background = colors[5],
-                       #mouse_callbacks = {'Button1': lambda: qtile.cmd_spawn(myTerm + ' -e sudo pacman -Syu')}
-
-                       #mouse_callbacks = 'https://openweathermap.org/city/788652',
-
                        mouse_callbacks = {'Button1': lambda: qtile.cmd_spawn(myBrowser + ' cointop.sh')},
-                       #mouse_callbacks = {'Button1': lambda: qtile.cmd_spawn(myTerm + ' -e cointop')},
                        format = '{amount:.0f}',
                        fontsize = 12
                        ),
@@ -526,6 +522,7 @@ def init_widgets_list():
                        ),
               widget.Clock(
                        background = colors[4],
+                       fontsize = 12,
                        #mouse_callbacks = {'Button1': open_calendar, 'Button2': close_calendar},
                        format = '%A, %B %d - %H:%M'
                        ),
@@ -541,8 +538,8 @@ def init_widgets_list():
                 widget.WidgetBox( 
                     background = colors[5],
                     text_closed = "",
-                    text_open = "",
-                    fontsize = 15,                  
+                    text_open = " ",
+                    fontsize = 14,                  
                         widgets=[
                             widget.Systray(background = colors[5])]                     
                     ),  
@@ -555,12 +552,13 @@ def init_widgets_list():
                     ),           
                 
             ]
+
     return widgets_list
 
 widgets_list = init_widgets_list()
 
 def open_calendar(qtile):  # spawn calendar widget
-    qtile.cmd_spawn('gsimplecal next_month')
+    qtile.cmd_spawn('gsimplecal')
 
 def close_calendar(qtile):  # kill calendar widget
     qtile.cmd_spawn('killall -q gsimplecal')
@@ -578,10 +576,18 @@ widgets_screen2 = init_widgets_screen2()
 
 
 def init_screens():
-    return [Screen(top=bar.Bar(widgets=init_widgets_screen1(), size=26, opacity=0.9)),
-            Screen(top=bar.Bar(widgets=init_widgets_screen2(), size=26, opacity=0.9))]
+    return [Screen(top=bar.Bar(widgets=init_widgets_screen1(), size=25, opacity=0.9)),
+            Screen(top=bar.Bar(widgets=init_widgets_screen2(), size=25, opacity=0.9))]
 screens = init_screens()
 
+
+def open_calendar(qtile):  # spawn calendar widget
+    qtile.cmd_spawn('gsimplecal next_month')
+
+def close_calendar(qtile):  # kill calendar widget
+    qtile.cmd_spawn('killall -q gsimplecal')
+
+    
 
 # MOUSE CONFIGURATION
 mouse = [
