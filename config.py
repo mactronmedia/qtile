@@ -18,7 +18,6 @@ from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
 #from libqtile.config import EzKey
 from typing import List  # noqa: F401from typing import List  # noqa: F401
-#from plasma import Plasma
 
 #import arcobattery
 
@@ -432,7 +431,7 @@ def init_widgets_list():
                        ),
                 widget.CheckUpdates(
                        update_interval = 60,
-                       distro = 'Arch_checkupdates',
+                       distro = 'Arch',
                        fmt = '{}',
                        display_format = "{updates} Updates",
                        foreground = colors[2],
@@ -523,7 +522,7 @@ def init_widgets_list():
               widget.Clock(
                        background = colors[4],
                        fontsize = 12,
-                       #mouse_callbacks = {'Button1': open_calendar, 'Button2': close_calendar},
+                       mouse_callbacks = {'Button1': lambda: qtile.cmd_spawn('gsimplecal')},
                        format = '%A, %B %d - %H:%M'
                        ),
 
@@ -540,8 +539,8 @@ def init_widgets_list():
                     text_closed = "",
                     text_open = " ",
                     fontsize = 14,                  
-                        widgets=[
-                            widget.Systray(background = colors[5])]                     
+                    widgets=[
+                      widget.Systray(background = colors[5])]                     
                     ),  
 
                 widget.Sep(
@@ -553,15 +552,15 @@ def init_widgets_list():
                 
             ]
 
+
+
     return widgets_list
+
 
 widgets_list = init_widgets_list()
 
 def open_calendar(qtile):  # spawn calendar widget
-    qtile.cmd_spawn('gsimplecal')
-
-def close_calendar(qtile):  # kill calendar widget
-    qtile.cmd_spawn('killall -q gsimplecal')
+    qtile.cmd_spawn('gsimplecal next_month')
 
 def init_widgets_screen1():
     widgets_screen1 = init_widgets_list()
@@ -579,13 +578,6 @@ def init_screens():
     return [Screen(top=bar.Bar(widgets=init_widgets_screen1(), size=25, opacity=0.9)),
             Screen(top=bar.Bar(widgets=init_widgets_screen2(), size=25, opacity=0.9))]
 screens = init_screens()
-
-
-def open_calendar(qtile):  # spawn calendar widget
-    qtile.cmd_spawn('gsimplecal next_month')
-
-def close_calendar(qtile):  # kill calendar widget
-    qtile.cmd_spawn('killall -q gsimplecal')
 
     
 
@@ -649,9 +641,10 @@ floating_layout = layout.Floating(float_rules=[
     Match(wm_class='feh'),
     Match(wm_class='Galculator'),
     Match(wm_class='arcolinux-logout'),
-    #Match(wm_class='xfce4-terminal'),
 
-],  fullscreen_border_width = 0, border_width = 0)
+],  
+
+fullscreen_border_width = 0, border_width = 0)
 auto_fullscreen = True
 
 focus_on_window_activation = "focus" # or smart
