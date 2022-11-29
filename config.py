@@ -26,7 +26,7 @@ mod = "mod4"
 mod1 = "alt"
 mod2 = "control"
 
-myTerm = "alacritty"      # My terminal of choice
+myTerm = "xfce4-terminal"      # My terminal of choice
 myBrowser = "qutebrowser" # My terminal of choice
 home = os.path.expanduser('~')
 
@@ -45,17 +45,13 @@ def window_to_next_group(qtile):
 
 
 keys = [
-
 # Most of our keybindings are in sxhkd file - except these
-
 # SUPER + FUNCTION KEYS
 
     Key([mod], "f", lazy.window.toggle_fullscreen()),
     Key([mod], "q", lazy.window.kill()),
 
-
 # SUPER + SHIFT KEYS
-
     Key([mod, "shift"], "q", lazy.window.kill()),
     Key([mod, "shift"], "r", lazy.restart()),
 
@@ -144,6 +140,7 @@ keys = [
 # TOGGLE FLOATING LAYOUT
     Key([mod, "shift"], "space", lazy.window.toggle_floating()),
 
+
 ]
 
 groups = []
@@ -185,9 +182,9 @@ layout_theme = init_layout_theme()
 
 
 layouts = [
-    layout.MonadTall(margin = 10, border_width = 2, border_focus="#b54dbd", border_normal="#4c566a"),
-    layout.MonadWide(margin = 5, border_width = 2, border_focus="#b54dbd", border_normal="#4c566a"),
-    layout.Matrix(**layout_theme),
+    layout.MonadTall(margin = 7, border_width = 2, border_focus="#bc94f7", border_normal="#4c566a"),
+    layout.MonadWide(margin = 5, border_width = 2, border_focus="#bc94f7", border_normal="#4c566a"),
+    layout.Matrix(margin = 5, border_width = 2, border_focus="#bc94f7", border_normal="#4c566a"),
     layout.Bsp(**layout_theme),
     layout.Floating(**layout_theme),
     layout.RatioTile(**layout_theme),
@@ -213,15 +210,6 @@ layouts = [
          vspace = 3,
          panel_width = 200
          )
-#        Plasma(
-#        border_normal='#333333',
-#        border_focus='#00e891',
-#        border_normal_fixed='#006863',
-#        border_focus_fixed='#00e8dc',
-#        border_width=1,
-#        border_width_single=0,
-#        margin=7
-#    )
 ]
 
 # COLORS FOR THE BAR
@@ -235,7 +223,7 @@ colors = [["#282c34", "#282c34"], # panel background
           ["#e1acff", "#e1acff"], # window name
           ["#ffffff", "#ffffff"],
           ["#1aff1a", "#1aff1a"], # background for active groups #32cd32
-          ["#03c03c", "#03c03c"], # center window name & cmus
+          ["#50FA7B", "#50FA7B"], # center window name & cmus
           ["#ff7f7f", "#ff7f7f"]] # notification
 
 def init_widgets_list():
@@ -244,27 +232,28 @@ def init_widgets_list():
 
               widget.TextBox(
                        text = '',
-                       fontsize = 23,
-                       font = "Iosevka Nerd Font",
+                       fontsize = 20,
+                       font = "Symbols Nerd Font",
                        mouse_callbacks = {'Button1': lambda: qtile.cmd_spawn('rofi -show drun -config ~/.config/rofi/config.rasi -display-drun \"Run: \" -drun-display-format \"{name}\"')},
                        background = colors[5],
-                       width = 27
+                       width = 23
                        ),
 
               widget.TextBox(
                        text = '',
+                       fontsize = 60,
+                       width = 25,
                        background = colors[5],
-                       foreground = colors[4],
-                       padding = 0,
-                       fontsize = 59
+                       foreground = colors[4]
                        ),
 
               widget.GroupBox(
-                       fontsize = 15,
+                       fontsize = 14,
+                       font = "Symbols Nerd Font",
                        margin_y = 4,
                        margin_x = 0,
-                       padding_y = 5,
-                       padding_x = 5,
+                       padding_y = 4,
+                       padding_x = 4,
                        borderwidth = 3,
                        active = colors[8],
                        inactive = colors[7],
@@ -283,29 +272,25 @@ def init_widgets_list():
                        foreground = colors[0],
                        background = colors[4],
                        padding = 0,
-                       fontsize = 59
+                       fontsize = 60
                        ),
-              widget.CurrentLayout(
-                        font = "Noto Sans",
-                        foreground = colors[2],
-                        background = colors[0],
-                        ),
               widget.Prompt(
                        prompt = prompt,
                        font = "Ubuntu Mono",
-                       padding = 10,
+                       padding = 7,
                        foreground = colors[3],
                        background = colors[1]
-                       ),
-              widget.Sep(
-                       linewidth = 1,
-                       padding = 10,
-                       background = colors[0]
                        ),
               widget.WindowName(
                        foreground = colors[9],
                        background = colors[0],
                        padding = 0
+                       ),
+
+                widget.Sep(
+                       linewidth = 1,
+                       padding = 10,
+                       background = colors[0]
                        ),
 
             ############ CENTER ############
@@ -314,23 +299,23 @@ def init_widgets_list():
 
                 background = colors[0],
                 play_color = colors[9],
-
               ),
             ############ RIGHT ############
 
               widget.TextBox( #CPU
-                       text = '',
+                       text = '',
                        background = colors[0],
                        foreground = colors[4],
                        padding = 0,
-                       fontsize = 59
+                       fontsize = 40
                        ),
               widget.TextBox(
                        text = '',
+                       fontsize = 17,
+                       font = "Symbols Nerd Font",
                        background = colors[4],
                        foreground = colors[2],
-                       padding = 2,
-                       fontsize = 20
+                       padding = 0
                        ),
                 widget.CPU(
                         foreground = colors[2],
@@ -338,24 +323,26 @@ def init_widgets_list():
                         foreground_alert = 'ffffff',
                         update_interval= 5.0,
                         mouse_callbacks = {'Button1': lambda: qtile.cmd_spawn(myTerm + ' -e bpytop')},
-                        #font = "Noto Sans",
+                        font = "SauceCodePro Nerd Font Bold",
                         fontsize = 12,
+                        padding = 7,
                         format = '{load_percent}%'
                         ),
 
                 widget.TextBox( #RAM
-                       text = '',
+                       text = '',
                        background = colors[4],
                        foreground = colors[5],
                        padding = 0,
-                       fontsize = 59
+                       fontsize = 40
                        ),
                 widget.TextBox(
                        text = '',
+                       fontsize = 12,
+                       font = "Symbols Nerd Font",
                        foreground = colors[2],
                        background = colors[5],
-                       padding = 0,
-                       fontsize = 14
+                       padding = 0
                        ),
                 widget.Memory(
                         foreground = colors[2],
@@ -363,24 +350,27 @@ def init_widgets_list():
                         foreground_alert = 'ff0000',
                         update_interval=5.0,
                         mouse_callbacks = {'Button1': lambda: qtile.cmd_spawn(myTerm + ' -e bpytop')},
+                        font = "SauceCodePro Nerd Font Bold",
                         fontsize = 12,
-                        format='{MemUsed: .0f}{mm}{MemTotal: .0f}{mm} '
+                        padding = 0,
+                        format='{MemUsed: .0f}{mm} /{MemTotal: .0f}{mm} '
                         ),
 
                  widget.TextBox( #Temp
-                           text = '',
+                           text = '',
                            background = colors[5],
                            foreground = colors[4],
                            padding = 0,
-                           fontsize = 59
+                           fontsize = 40
                            ),
 
                  widget.TextBox(
                            text = '',
                            background = colors[4],
                            foreground = colors[2],
-                           padding = 4,
-                           fontsize = 14
+                           font = "Symbols Nerd Font",
+                           fontsize = 12,
+                            padding = 0
                            ),
                   widget.ThermalSensor(
                             fmt = '{} ',
@@ -389,37 +379,40 @@ def init_widgets_list():
                             background = colors[4],
                             foreground_alert = 'ffbb00',
                             threshold = 70,
+                            font = "SauceCodePro Nerd Font Bold",
                             fontsize = 12,
-                            padding = 0
+                            mouse_callbacks = {'Button1': lambda: qtile.cmd_spawn(myTerm + ' -e glances')},
+                            padding = 7
                             ),
 
                 widget.TextBox( #Vol
-                       text = '',
+                       text = '',
                        background = colors[4],
                        foreground = colors[5],
                        padding = 0,
-                       fontsize = 59
+                       fontsize = 40
                        ),
                widget.TextBox(
                        text = "",
+                       fontsize = 15,
+                       font = "Symbols Nerd Font",
                        foreground = colors[2],
                        background = colors[5],
-                       padding = 0,
-                       fontsize = 16
+                       padding = 0
                        ),
-              widget.Volume(
+              widget.PulseVolume(
                        background = colors[5],
+                       font = "SauceCodePro Nerd Font Bold",
                        fontsize = 12,
-                       padding = 3
+                       padding = 7
                        ),
-
 
                 widget.TextBox( #Updates
-                       text = '',
+                       text = '',
                        background = colors[5],
                        foreground = colors[4],
                        padding = 0,
-                       fontsize = 59
+                       fontsize = 40
                        ),
                 widget.Wallpaper (
                        directory = '~/Pictures/wallpapers',
@@ -427,73 +420,82 @@ def init_widgets_list():
                        random_selection = True,
                        background = colors[4],
                        foreground = colors[2],
-                       fontsize = 18
+                       scroll_delay = 2,
+                       font = "Symbols Nerd Font",
+                       padding = 7,    
+                       fontsize = 17
                        ),
                 widget.CheckUpdates(
                        update_interval = 60,
-                       distro = 'Arch',
+                       distro = 'Arch_checkupdates',
                        fmt = '{}',
                        display_format = "{updates} Updates",
                        foreground = colors[2],
                        background = colors[4],
+                       font = "SauceCodePro Nerd Font Bold",
                        fontsize = 12,
+                       padding = 7,
                        mouse_callbacks = {'Button1': lambda: qtile.cmd_spawn(myTerm + ' -e sudo pacman -Syu')}
                        ),
 
                 widget.TextBox( #Net
-                       text = '',
+                       text = '',
                        background = colors[4],
                        foreground = colors[5],
                        padding = 0,
-                       fontsize = 59
+                       fontsize = 40
                        ),
                 widget.TextBox(
                        text = "",
                        foreground = colors[2],
                        background = colors[5],
-                       padding = 3,
-                       fontsize = 10
+                       padding = 0,
+                       font = "Symbols Nerd Font",
+                       fontsize = 17
                        ),
                widget.Net(
-                       format = '{down} {up} ',
+                       format = '{down} / {up} ',
                        foreground = colors[2],
                        background = colors[5],
-                       padding = 0,
                        update_interval= 5.0,
+                       font = "SauceCodePro Nerd Font Bold",
                        fontsize = 12
                        ),
 
               widget.TextBox( #Windows
-                       text = '',
+                       text = '',
                        background = colors[5],
                        foreground = colors[4],
                        padding = 0,
-                       fontsize = 59
+                       fontsize = 40
                        ),
               widget.CurrentLayoutIcon(
                        custom_icon_paths = [os.path.expanduser("~/.config/qtile/icons")],
                        background = colors[4],
-                       padding = 0,
-                       scale = 0.6
+                       scale = 0.5
                        ),
               widget.CurrentLayout(
                        foreground = colors[2],
                        background = colors[4],
-                       padding = 4
+                       font = "SauceCodePro Nerd Font Bold",
+                       fontsize = 12,
+                       padding = 7
                        ),
 
                 widget.TextBox( #BTC
-                       text = '',
+                       text = '',
                        background = colors[4],
                        foreground = colors[5],
                        padding = 0,
-                       fontsize = 59
+                       padding_x = 0,
+                       fontsize = 40
                        ),
                 widget.TextBox(
                        text = " ",
                        foreground = colors[2],
                        background = colors[5],
                        padding = 0,
+                       font = "Symbols Nerd Font",
                        fontsize = 16
                        ),
               widget.CryptoTicker(
@@ -502,15 +504,17 @@ def init_widgets_list():
                        background = colors[5],
                        mouse_callbacks = {'Button1': lambda: qtile.cmd_spawn(myBrowser + ' cointop.sh')},
                        format = '{amount:.0f}',
-                       fontsize = 12
+                       font = "SauceCodePro Nerd Font Bold",
+                       fontsize = 12,
+                       padding = 7
                        ),
 
               widget.TextBox( #Date
-                       text = '',
+                       text = '',
                        background = colors[5],
                        foreground = colors[4],
                        padding = 0,
-                       fontsize = 59
+                       fontsize = 40
                        ),
               widget.TextBox(
                        text = ' ',
@@ -521,24 +525,26 @@ def init_widgets_list():
                        ),
               widget.Clock(
                        background = colors[4],
+                       font = "SauceCodePro Nerd Font Bold",
                        fontsize = 12,
                        mouse_callbacks = {'Button1': lambda: qtile.cmd_spawn('gsimplecal')},
-                       format = '%A, %B %d - %H:%M'
+                       format = '%B %d - %H:%M',
+                       padding = 7
                        ),
 
              widget.TextBox( #System
-                       text = '',
+                       text = '',
                        background = colors[4],
                        foreground = colors[5],
                        padding = 0,
-                       fontsize = 59
+                       fontsize = 40
                        ),
 
                 widget.WidgetBox( 
                     background = colors[5],
                     text_closed = "",
                     text_open = " ",
-                    fontsize = 14,                  
+                    fontsize = 12,                  
                     widgets=[
                       widget.Systray(background = colors[5])]                     
                     ),  
@@ -548,11 +554,8 @@ def init_widgets_list():
                     linewidth = 0,
                     padding = 8
 
-                    ),           
-                
+                    ),   
             ]
-
-
 
     return widgets_list
 
