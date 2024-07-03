@@ -1,3 +1,5 @@
+Basic configuration for the tiling window manager Qtile
+
 picom.conf #Fix screan tearing on Asus
 
 ```
